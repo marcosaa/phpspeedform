@@ -1,705 +1,17 @@
 <?php
    /**
-     * Classe SpeedForm.class.php
-     * @author Moise's Sena
-     * @version 1.0 - 2008-11-03
-     * <sena.andromeda@gmail.com>
+     * Gera o código HTML de Formulários e campos
      * 
-     * Permite a criaçao de Formularios HTML Dinâmicos
+     * @package PHPSpeedForm
+     * @author Moiseés Paes Sena <moisespsena@gmail>
+     * @link http://moisespsena.wordpress.com
+     * @version 1.0
+     * @since 2009-03-27
      */
-	 
-	/**
-	  *	Depois da documentaçao
-	  * Segue um bom exemplo de uso da Class
-	 */
-
-	/*
-		USAGE:
-			
-			PROPERTIES:
-			    
-			    $sf->list             = true; // permite que o formulario seja criado usando listas nao-ordenadas
-				$sf->new_line         = false; // add "<br>" to end
-				$sf->new_line_content = '<div style="clear:both;" />'
-	            $sf->char_sep         = ':'; // to end Label
-				$sf->label_title      = true; // permite que o label tenha ou nao o attributo title igual ao objeto referenciado
-				
-				// to LI diff
-				$sf->class_list_even  = 'myclass_even';
-				$sf->class_list_odd   = 'myclass_odd';
-			
-			METHODS:
-				
-				FORM / FORMFILE:
-					
-					FormFile :
-						Funciona como o metodo Form, pore'm adiciona o atributo "enctype" com value "multipart/form-data"
-					
-					SINTAXE:
-						*	$sf->FormFile( $action:string, $method:string ) {*}
-						*		or
-						*	op 1. $sf->Form( $action:string, $method:string ) {*}
-						*		or
-						*	op 2. $sf->Form( $action:string, $method:string, $contents:string[HTML], $return:boolean{false} )
-						*		or
-						*	op 3. $sf->Form( $attributes:array[assoc], $contents:string[HTML], $return:boolean{false} )
-						
-					
-					EXEMPLES:
-					
-						op 1:
-						
-							$sf = new SpeedForm();
-							$sf->Form( 'recepty.php', 'POST' );
-							$sf->Text( 'Name', 'name', 'Insert to name' );
-							
-							echo $sf->Create();
-								// or
-							$sf->PrintForm();
-						_______________________________________________
-						
-						op 2:
-						
-							$sf = new SpeedForm();
-							$sf->Form( 
-								'recepty.php', 
-								'POST', 
-								$sf->Text( 'Name', 'name', 'Insert to name' )
-							);
-							
-							echo $sf->Create();
-								// or
-							$sf->PrintForm();
-						_______________________________________________
-						
-						op 2 ( $return = true ) :
-						
-							$sf = new SpeedForm();
-							$myForm = $sf->Form( 
-								'recepty.php', 
-								'POST', 
-								$sf->Text( 'Name', 'name', 'Insert to name' ),
-								true
-							);
-							
-							echo $myForm;
-						_______________________________________________
-						
-						op 3 :
-						
-							$sf = new SpeedForm();
-							$sf->Form( 
-								array( 
-									'target' => 'myIframe',
-									'action' => 'recepty.php',
-									'method' => 'POST',
-									'class' => 'myFormClass'
-								), 
-								$sf->Text( 'Name', 'name', 'Insert to name' )
-							);
-							
-							echo $sf->Create();
-								// or
-							$sf->PrintForm();
-						_______________________________________________
-						
-						op 3 ( $return = true ) :
-						
-							$sf = new SpeedForm();
-							$myForm = $sf->Form( 
-								array( 
-									'target' => 'myIframe',
-									'action' => 'recepty.php',
-									'method' => 'POST',
-									'class' => 'myFormClass'
-								), 
-								$sf->Text( 'Name', 'name', 'Insert to name' ),
-								true
-							);
-							
-							echo $myForm;
-						_______________________________________________
-						
-					{*}	armazena numa variavel a tag form, enquanto vai setando os objetos,
-						para depois recupera-los com "$sf->Create()" ou "$sf->PrintForm()"
-						
-						
-				TEXT:
-					
-					SINTAXE :
-					
-						*	op 1. Text( label:string, name:string, title:string, maxlength:number, value:string )
-						*		or
-						* 	op 2. Text( label:string, attributes:array[assoc], label_attributes:array[assoc] )
-						*		or
-						*	op 3. Text( array( args op1 ):numeric, array( args op1 ):numeric [...] )
-						*		or
-						*	op 4. Text( array( args op2 ):numeric, array( args op2 ):numeric [...] )
-									
-					EXAMPLES :
-						
-						$sf->Text( 'Text1', 'my_name', 'my_title', 10, 'my_value' )
-						
-						$sf->Text( 'Text2', array( 'name' => 'my_name2', 'class' => 'my_class2', 'value' => 'my_value2' ), array( 'class' => 'label_class2' ) )
-						
-						$sf->Text(
-							array( 'Text3', array( 'name' => 'my_name4', 'title' => 'my_title3', 'value' => 'my_value3' ), array( 'class' => 'label_class3' ) )
-							array( 'Text4', 'my_name4', 'my_title4', 15, 'my_value4' )
-						)
-						
-				HIDDEN:
-					
-					SINTAXE :
-					
-						*	op 1. Hidden( $name:string, $value:string )
-						*		or
-						* 	op 2. Hidden( $name:string, $value:string, $attributes:array[assoc] )
-						*		or
-						*	op 3. Hidden( $array( args op1 or op2 ):numeric, array( args op1 or op2 ):numeric [...] )
-									
-					EXAMPLES :
-						
-						$sf->Hidden( 'my_name', 'my value' )
-						
-						$sf->Hidden( 'my_name2', 'my value 2', array( 'id' => 'myHidden' ) )
-						
-						$sf->Hidden(
-							array( 'my_name', 'my value' ),
-							array( 'my_name2', 'my value 2', array( 'id' => 'myHidden' ) )
-						)
-					
-				IMAGE:
-				
-					SINTAXE :
-					
-						*	op 1. Image( $src:string, $title:string, $alt:string )
-						*		or
-						* 	op 2. Image( $src:string, $attributes:array[assoc] )
-						*		or
-						*	op 3. Image( $src( args op1 or op2 ):numeric, array( args op1 or op2 ):numeric [...] )
-									
-					EXAMPLES :
-						
-						$sf->Image( 'img.jpg', 'Click to submit', 'Send' )
-						
-						$sf->Image( 'img.jpg', array( 'id' => 'outer', 'onclick' => 'alert( "outer" );return false;' ))
-						
-						$sf->Image(
-							array( 'img.jpg', 'Click to Submit', 'Send' ),
-							array( 'img.jpg', array( 'id' => 'outer', 'onclick' => 'alert( "outer" );return false;' ))
-						)
-					
-				BUTTON:
-				
-					SINTAXE :
-					
-						*	op 1. Button( $value:string, $title:string, $selector_class_id:string )
-						*		or
-						* 	op 2. Button( $value:string, $attributes:array[assoc] )
-						*		or
-						*	op 3. Button( $array( args op1 or op2 ):numeric, array( args op1 or op2 ):numeric [...] )
-									
-					EXAMPLES :
-						
-						$sf->Button( 'Cancel', 'Click to cancel', '#myId .myClass1 .myClass2' )
-						
-						$sf->Button( 'Outer', array( 'id' => 'outer', 'onclick' => 'alert( "outer" );' ))
-						
-						$sf->Button(
-							array( 'Cancel', 'Click to cancel', '#myId .myClass1 .myClass2' ),
-							array( 'Outer', array( 'id' => 'outer', 'onclick' => 'alert( "outer" );' ))
-						)
-					
-				TAG BUTTON:
-				
-					SINTAXE :
-					
-						*	op 1. tgButton( $contents:string, $attributes:array[assoc] )
-						*		or
-						*	op 2. tgButton( $array( $contents:string, $attributes:array[assoc] ):numeric, arg1[...], $return_html:boolean{false} )
-									
-					EXAMPLES :
-						
-						$sf->Button( 'Outer', array( 'id' => 'outer', 'onclick' => 'alert( "outer" );' ))
-						
-						$sf->Button(
-							array( 'Cancel', 'Click to cancel', '#myId .myClass1 .myClass2' ),
-							array( 'Outer', array( 'id' => 'outer', 'onclick' => 'alert( "outer" );' ))
-						)
-					
-				SUBMIT / RESET:
-				
-					SINTAXE :
-					
-						*	op 1. Submit( $value:string, $title:string, $selector_class_id:string )
-						*		or
-						* 	op 2. Submit( $value:string, $attributes:array[assoc] )
-									
-					EXAMPLES :
-						
-						$sf->Submit( 'Send', 'Click to Send Form', '#myId .myClass1 .myClass2' )
-						
-						$sf->Submit( 'Send', array( 'id' => 'send', 'class' => 'myClass' ) )
-				
-				CHECKBOX / OPTIONS:
-					
-					SINTAXE :
-					
-						*	op 1. Checkbox( array( $label:string, $attributes:array[assoc], $label_attributes:array[assoc] ):parms )
-						*		or
-						*	op 2. Checkbox( array( parms[op 1]:array, parms[op 1]:array ), $return_array:boolean{false} )
-						*		or
-						*	op 3. Checkbox( $text_group:string, array( parms[op 1]:array, parms[op 1]:array ), $return_array:boolean{false} )
-									
-					EXAMPLES :
-					
-						$sf->Checkbox( array( 'ChkBox1', array( 'id' => 'ChkBox1' ), array( 'id' => 'label_id1' )) )
-						
-						$sf->Checkbox(
-							array(
-								array( 'ChkBox4', array( 'id' => 'ChkBox4' ), array( 'id' => 'label_id4' ) ),
-								array( 'ChkBox5', array( 'id' => 'ChkBox5' ), array( 'id' => 'label_id5' ) )
-							)
-						)
-						
-						$sf->Checkbox(
-							array(
-								array( 'ChkBox2', array( 'id' => 'ChkBox2' ), array( 'id' => 'label_id2' ) ),
-								array( 'ChkBox3', array( 'id' => 'ChkBox3' ), array( 'id' => 'label_id3' ) )
-							)
-							,true
-						)
-						
-						$sf->Checkbox(
-							'My CheckBoxes Group 1',
-							array(
-								array( 'ChkBox6', array( 'id' => 'ChkBox6' ), array( 'id' => 'label_id6' ) ),
-								array( 'ChkBox7', array( 'id' => 'ChkBox7' ), array( 'id' => 'label_id7' ) )
-							)
-						)
-						
-						$sf->Checkbox(
-							array( 'My CheckBoxes Group 2', array( 'class' => 'chk_group' ), array( 'name' => 'test' ) ),
-							array(
-								array( 'ChkBox6', array( 'id' => 'ChkBox6' ), array( 'id' => 'label_id6' ) ),
-								array( 'ChkBox7', array( 'id' => 'ChkBox7' ), array( 'id' => 'label_id7' ) )
-							)
-						)
-						
-						$sf->Checkbox(
-							array( array( 'name' => 'test' ) ),
-							array(
-								array( 'ChkBox6', array( 'id' => 'ChkBox6' ), array( 'id' => 'label_id6' ) ),
-								array( 'ChkBox7', array( 'id' => 'ChkBox7' ), array( 'id' => 'label_id7' ) )
-							)
-						)
-						
-						$sf->Radio(
-							array( array( 'name' => 'sexo' ) ),
-							array(
-								array( 'ChkBox6', array( 'id' => 'ChkBox6' ), array( 'class' => 'ckb_class' ) ),
-								array( 'ChkBox7', array( 'id' => 'ChkBox7' ), array( 'class' => 'ckb_class' ) )
-							), true
-						)
-	                    
-	            FILE:
-	                
-	                SINTAXE:
-	                    
-	                    *   op 1. File( $attributes:array[assoc] )
-	                    *       or
-	                    *   op 2. File( $label:string, $name:string, $max_file_size:numeric[bytes], $label_attributes:array[assoc])
-	                    *       or
-	                    *   op 3. File( $label:string, $attributes:array[assoc], $max_file_size:numeric[bytes], $label_attributes:array[assoc] )
-	                
-	                EXAMPLES:
-	                    
-	                    $sf->File( array( 'id' => 'label_id', 'class' => 'class1 class2', 'name' => 'my_file' ) )
-	                    
-	                    $sf->File( 'My File', 'filedata', 1024, array( 'id' => 'label_id' ) )
-	                    
-	                    $sf->File( 'My File', array( 'id' => 'file_id', 'name' => 'my_file' ), 1024, array( 'id' => 'label_id' ) )
-				
-				TEXTAREA:
-					
-					SINTAXE:
-						
-						*	op 1. Textarea( $attributes:array[assoc] )
-						*		or
-						*	op 2. Textarea( $label:string, $attributes:array[assoc], $label_attributes:array[assoc] )
-						
-					EXAMPLES:
-						
-						$sf->Textarea( array( 'cols'=>100, 'rows'=>30 ) )
-						
-						$sf->Textarea( 'My Textarea', array( 'cols'=>100, 'rows'=>30 ), array( 'id' => 'label_id' ) )
-				
-				SELECT:
-				
-					SINTAXE:
-					
-						*   op 1. Select( 
-						*   	$label:string,  
-						*   	$data:array,  
-						*   	$attributes:array[assoc],  
-						*   	$selected:string|number,  
-						*   	$init:array|string,  
-						*   	$opt_attr:array[assoc]  
-						*   )
-					
-					EXAMPLES:
-						
-						// Normal
-						$sf->Select(
-							'my Select',
-							array( 1, 2, 3, 4, 5 ),
-							array( 'id' => 'meu_select', 'class' => 'myclass myclass2' ),
-							3,
-							'SELECIONE',
-							array( 'onclick' => 'javascript:alert( this.value );' )
-						)
-						
-						// Value, Text
-						$sf->Select(
-							'my Select',
-							array(
-								array( 'a', 1 ),
-								array( 'b', 2 ),
-								array( 'c', 3 )
-							),
-							array( 'id' => 'meu_select', 'class' => 'myclass myclass2' ),
-							'c',
-							'SELECIONE',
-							array( 'onclick' => 'javascript:alert( this.value );' )
-						)
-						
-						// Groups
-						$sf->Select(
-							'my Select',
-							array(
-								array( 'grupo 2', 3, 'text3' ),
-								array( 'grupo 2', 4, 'text4' ),
-								array( 'grupo 1', 1, 'text1' ),
-								array( 'grupo 1', 2, 'text2' ),
-								array( 'grupo 2', 5, 'text5' ),
-								array( '', 6, 'text6' ),
-								array( '', 7, 'text7' )
-							),
-							array( 'id' => 'meu_select', 'class' => 'myclass myclass2', 'title' => 'selecione um dos Itens' ),
-							3,
-							'SELECIONE',
-							array( 'onclick' => 'javascript:alert( this.value );' )
-						)
-				
-				PARENT CHECKBOX OU RADIO :
-					
-					Adiciona uma tag pai ao input checkbox e radio:
-					
-						* <span>
-						*	<input type="checkbox" />
-						* </span>
-					
-					SINTAXE:
-						
-						* op 1. parentCheckAndRadio( $tag:string, $attributes:array[assoc] );
-						*		or
-						* op 2. parentCheckAndRadio( $attributes:array[assoc] );
-					
-					EXAMPLES:
-						
-						$sf->parentCheckAndRadio( array( 'class' => 'check_radio' ) );
-						
-						$sf->parentCheckAndRadio( 'div', array( 'class' => 'check_radio' ) );
-				
-				
-				SET LIST ATTRIBUTES :
-				
-					Adiciona attributos à lista de conteúdo do Formulario
-					
-						SINTAXE:
-						
-							*
-							*	setListAttributes( $attributes:array[assoc] );
-							*
-							
-						EXAMPLE:
-							
-							$sf->setListAttributes( array( 'class' => 'obricatorio' ) );
-				
-				
-				SET REQUIRED ATTRIBUTES :
-				
-					Adiciona attributos específicos à um objeto cujo label começa com "*"
-					
-						SINTAXE:
-						
-							*
-							*	setRequiredAttributes( $attributes:array[assoc] );
-							*
-							
-						EXAMPLE:
-							
-							$sf->setRequiredAttributes( array( 'class' => 'obricatorio' ) );
-							
-				
-				SET CHECK RADIO GROUP LABEL:
-					
-					Define uma Tag e adiciona Attributos à tag do Label de Grupos de Checkbox e Radios
-					
-						* <span class="check_group">
-						*	Checkbox Group
-						* </span>
-					
-					SINTAXE:
-						
-						* op 1. setCheckRadioGroupLabel( $tag:string, $attributes:array[assoc] );
-						*		or
-						* op 2. setCheckRadioGroupLabel( $attributes:array[assoc] );
-					
-					EXAMPLES:
-						
-						$sf->setCheckRadioGroupLabel( array( 'class' => 'check_radio' ) );
-						
-						$sf->setCheckRadioGroupLabel( 'div', array( 'class' => 'check_radio' ) );
-	*/
-	
-	/**
-	
-		EXAMPLE:
-					
-			<?php
-				
-				include_once( 'SpeedForm.class.php5' );
-				
-				$sf = new SpeedForm();
-				$sf->list             = true;
-				$sf->class_list_even  = 'alter';
-				$sf->class_list_odd   = 'noalter';
-				$sf->new_line_content = '<div style="clear:both;" />';
-				
-				$sf->parentCheckAndRadio( array( 'class' => 'check_radio' ) );
-				$sf->setRequiredAttributes( array( 'class' => 'obrigatorio' ) );
-				$sf->setListAttributes( array( 'class' => 'minha_lista' ) );
-				$sf->setCheckboxGroupLabel( 'span', array( 'class' => 'chk_group' ) );
-				$sf->setRadioGroupLabel( 'span', array( 'class' => 'chk_group' ) );
-				$f = $sf->FormFile(
-					'data.php',
-					'POST',
-					$sf->Contents(
-						$sf->Group(
-							'My Selects',
-							'', '',
-							$sf->Select(
-								'*my Select',
-								array(
-									array( 'a', 1 ),
-									array( 'b', 2 ),
-									array( 'c', 3 )
-								),
-								array( 'id' => 'meu_select', 'class' => 'myclass myclass2' ),
-								'',
-								'SELECIONE',
-								array( 'onclick' => 'javascript:alert( this.value );' )
-							),
-							$sf->Select(
-								'*my Select',
-								array( 'Primeiro', 'Segundo', 'Terceiro', 'Quarto' ),
-								'',
-								'Primeiro',
-								'SELECIONE',
-								array( 'onclick' => 'javascript:alert( this.value );' )
-							),
-							$sf->Select(
-								'*my Select',
-								array(
-									array( 'a', 1 ),
-									array( 'b', 2 ),
-									array( 'c', 3 )
-								),
-								'',
-								'c',
-								'SELECIONE',
-								array( 'onclick' => 'javascript:alert( this.value );' )
-							)
-						),
-						$sf->Group(
-							'Outer',
-							'', '',
-							$sf->Checkbox(
-								array( 'Descendência:', '', array( 'name' => 'data' ) ),
-								array(
-									array( 'Afro', '', array( 'class' => 'ckb_class' ) ),
-									array( 'Inglês', '', array( 'class' => 'ckb_class' ) )
-								), true
-							),
-							$sf->Radio(
-								array( 'Sexo:', array( 'class' => 'chk_group outer_group' ), array( 'name' => 'sexo' ) ),
-								array(
-									array( 'Masculino', '', array( 'class' => 'ckb_class' ) ),
-									array( 'Feminino', '', array( 'class' => 'ckb_class' ) )
-								), true
-							)
-						),
-						$sf->Group(
-							'Files',
-							'', '',
-							$sf->File( array( 'id' => 'label_id', 'class' => 'class1 class2', 'name' => 'my_file' ) ),
-							$sf->File( '*My File', 'filedata', 1024, array( 'id' => 'label_id' ) ),
-							$sf->File( '*My File 2', array( 'id' => 'file_id', 'name' => 'my_file' ), 1024, array( 'id' => 'label_id' ) )
-						),
-						$sf->Group(
-							'Textarea',
-							'', '',
-							$sf->Textarea( array( 'cols' => 60, 'rows' => 2 ) ),
-							$sf->Textarea( '*My Textarea', array( 'cols' => 60, 'rows' => 2 ), array( 'id' => 'label_id', 'class' => 'textarea' ) ),
-							$sf->Textarea( array( 'cols' => 60, 'rows' => 2, 'value' => 'Conteúdo do Textarea' ) ),
-							$sf->Textarea( '*My Textarea 2', array( 'cols' => 60, 'rows' => 2, 'value' => 'Conteúdo do Textarea 2' ), array( 'id' => 'label_id', 'class' => 'textarea' ) )
-						),
-						$sf->Group(
-							'My Texts',
-							'', '',
-							$sf->Text( '*Text1', 'my_name', 'my_title', 10, 'my_value' ).'<span>Maximo de 10 caracters</span>',
-							$sf->Text( '*Text2', array( 'name' => 'my_name2', 'class' => 'my_class2', 'value' => 'my_value2' ), array( 'class' => 'label_class2' ) ),
-							$sf->Text( '*Text3', '', array( 'class' => 'datas' ) ),
-							$sf->Text(
-								array( '*Text4', array( 'name' => 'my_name4', 'title' => 'my_title4', 'value' => 'my_value4' ), array( 'class' => 'label_class4' ) ),
-								array( '*Text5', 'my_name5', 'my_title5', 12, 'my_value5' )
-							),
-							$sf->Text(
-								array( '*Dados', 'meu_nome', 'meu_titulo', '111111111111' ),
-								array( '*Dados1', 'meu_nome2', 'meu_titulo2', '2222222' ),
-								array( '*Dados2', 'meu_nome3', 'meu_titulo3', '33333333' ),
-								array( '*Dados3', 'meu_nome4', 'meu_titulo4', '44444444444' )
-							),
-							'<div style="text-align:center">'.
-							$sf->Button(
-								array( 'Enviar', array( 'id' => 'meu_button' ) ),
-								array( 'Cancelar', 'Clicque para cancelar', '#meuId .class1 .class2' )
-							).
-							$sf->Submit( 'Salvar', 'Clique para salvar os seus Dados', '#meuId .class1 .class2' ).
-							$sf->Reset( 'Limpar', 'Clique para limar o formulario', '#meuId .class1 .class2' )
-							.'</div>'
-						),
-						$sf->Hidden( array( 'name' => 'label_id' ) ),
-						$sf->Hidden( array( 'nome', 'Moises' ), array( 'sobrenome', 'Sena' ), array( 'Idade', 18 ) )
-					)
-				);
-				
-			?>
-			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-			<html xmlns="http://www.w3.org/1999/xhtml">
-				<head>
-					<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-					<title>SpeedForm</title>
-					<style type="text/css">
-									
-						*{
-							font-family:Verdana, Geneva, sans-serif;
-						}
-						.alter {
-							background:#eee;
-						}
-						.noalter {
-							background:#white;
-						}
-						
-						input[type=text] {
-							border:1px solid #999;
-							width:200px;
-							margin:2px 0;
-						}
-						
-						UL.minha_lista {
-							list-style:none;
-							margin:0;
-							padding:5px;
-						}
-						
-						UL.minha_lista LI {
-							padding:2px;
-							height:100%;
-						}
-						
-						fieldset {
-							border:2px solid #CCC;
-							padding:0;
-						}
-						
-						legend {
-							color:#666;
-							font-weight:bold;
-							font-size:14px;
-							margin-left:5px;
-						}
-						
-						label {
-							font-size:12px;
-							display:block;
-							width:150px;
-							background:#ddd;
-							padding:5px 2px;
-							float:left;
-							text-align:right;
-							margin-right:3px;
-							font-weight:bold;
-							color:#666;
-						}
-						
-						.check_radio {
-							float:left;
-							display:block;
-							height:21px;
-							padding-top:3px;
-							background:#ddd;
-							margin-right:2px;
-						}
-						
-						.chk_group {
-							font-weight:bold;
-							font-size:13px;
-							color:#666;
-							padding-top:5px;
-						}
-						
-						.ckb_class {
-							text-align:left;
-							float:left;
-							background:none;
-						}
-						
-						span {
-							font-size:11px;
-						}
-						
-						label.textarea {
-							text-align:left;
-							background:transparent;
-						}
-						
-						label span {
-							color:red;
-							font-weight:bold;
-						}
-						
-						.obrigatorio {
-						}
-						
-					</style>
-				</head>
-				<body>
-					<?php
-						$sf->PrintForm();
-					?>
-				</body>
-			</html>
-
-
-	*/
-    
 	class SpeedForm {
 		
 		/**
-		 * Lista nos Fieldsets
+		 * Lista de Fieldsets
 		 *
 		 * Permite ou nao que os itens dos Fieldsets seja armazenados em uma lista.
 		 * Isto permite que tais itens possam ser visualmente mais bem trabalhados com CSS
@@ -712,21 +24,23 @@
 		 *
 		 * @var array
 		 */
-		private $list_attributes = array();
+		private $listAttributes = array();
 		
 		/**
 		 * Valor do atributo "class" do item de i'ndice PAR da lista nos Fieldsets
 		 *
 		 * @var string
 		 */
-		private $list_even_class_name = '';
+		//private $list_even_class_name = '';
+		private $listEvenClassName = '';
 		
 		/**
 		 * Valor do atributo "class" do item de i'ndice I'MPAR da lista nos Fieldsets
 		 *
 		 * @var string
 		 */
-		private $list_odd_class_name = '';
+		//private $list_odd_class_name = '';
+		private $listOddClassName = '';
 		
 		/**
 		 * Lista no Formula'rio
@@ -872,7 +186,7 @@
 		 * @return void
 		 */
 		public function setListAttributes( $attributes = array() ) {
-			$this->list_attributes = $attributes;
+			$this->listAttributes = $attributes;
 		}
 		
 		/**
@@ -882,7 +196,7 @@
 		 * @return void
 		 */		
 		public function setListEvenClassName( $class_name ) {
-			$this->list_even_class_name = $class_name;
+			$this->listEvenClassName = $class_name;
 		}
 		
 		/**
@@ -892,7 +206,7 @@
 		 * @return void
 		 */
 		public function setListOddClassName( $class_name ) {
-			$this->list_odd_class_name = $class_name;
+			$this->listOddClassName = $class_name;
 		}
 		
 		/**
@@ -2003,7 +1317,7 @@
 			}
 			else {
 				$create_list = $this->list;
-				$attributes = $this->list_attributes;
+				$attributes = $this->listAttributes;
 				$root_index_class_name = false;
 			}
 					 
@@ -2028,7 +1342,7 @@
 			$class_name = $root_index_class_name ? 
 					array( $this->list_root_even_class_name, $this->list_root_odd_class_name )
 				:
-					array( $this->list_even_class_name, $this->list_odd_class_name );
+					array( $this->listEvenClassName, $this->listOddClassName );
 					
 			if( is_array( $content ) ) {
 				$r = 0;
