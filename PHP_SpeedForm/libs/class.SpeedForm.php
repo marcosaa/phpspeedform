@@ -4,7 +4,7 @@
      * 
      * @package PHPSpeedForm
      * @author Moiseés Paes Sena <moisespsena@gmail>
-     * @link http://moisespsena.wordpress.com
+     * @link http://code.google.com/p/phpspeedform/source/browse/trunk/PHPSpeedForm/libs/class.SpeedForm.php
      * @version 1.0
      * @since 2009-03-27
      */
